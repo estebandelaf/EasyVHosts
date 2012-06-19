@@ -1,0 +1,28 @@
+$TTL    3600 ; time to live
+
+$ORIGIN {domain}.
+
+@		IN SOA {domain}. root ( 	; Autoridad para la zona
+			{serial}		; Serial
+			3H			; Cada cuanto secundario consultara
+			1H			; Cada cuanto secundario reintentara en caso de no encontrar al primario
+			1W			; Cuando el secundario dejara de intentar preguntar
+			1D )			; Tiempo minimo que se estara en el cache
+		
+                IN NS		{domain}.	; servidor dns
+		IN NS		secundario.nic.cl.
+                IN A		{ip}	; ip dominio
+
+		IN MX	1	aspmx.l.google.com.
+		IN MX	2	alt1.aspmx.l.google.com.
+		IN MX	2	alt2.aspmx.l.google.com.
+		IN MX	3	aspmx2.googlemail.com.
+		IN MX	3	aspmx3.googlemail.com.
+		IN MX	3	aspmx4.googlemail.com.
+		IN MX	3	aspmx5.googlemail.com.
+
+*		IN CNAME	{domain}.
+mail            IN CNAME	ghs.google.com.
+docs            IN CNAME	ghs.google.com.
+calendar	IN CNAME	ghs.google.com.
+

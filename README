@@ -1,0 +1,14 @@
+Easy Virtual Hosts o EasyVHosts es una herramienta para la
+administración de dominios virtuales de diferentes usuarios en un
+sistema GNU/Linux. Utiliza un formato de directorios y archivos para
+los dominios de los usuarios, obteniendo dinámicamente las
+características de los mismos y generando automáticamente los
+archivos de configuración para lo servicios involucrados (como httpd
+o named).
+
+Para más información visitar la página del proyecto:
+
+  http://dev.sasco.cl/easyvhosts
+
+by Esteban De La Fuente Rubio
+

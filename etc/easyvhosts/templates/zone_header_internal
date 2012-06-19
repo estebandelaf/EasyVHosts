@@ -1,0 +1,5 @@
+zone "{domain}" {
+	type master;
+	file "zones/master/generated/internal/{domain}";
+};
+

@@ -1,0 +1,43 @@
+<VirtualHost *:{port}>
+        ServerName {servername}
+	ServerAlias {serveralias}
+        DocumentRoot {root}
+	<Directory {root}>
+                Options Indexes FollowSymLinks MultiViews
+		AllowOverride all
+		IndexOptions FancyIndexing FoldersFirst VersionSort XHTML Charset=UTF-8
+		AddType text/html .php
+		HeaderName /autoindex/header.php
+		ReadmeName /autoindex/footer.php
+		IndexIgnore autoindex
+		IndexOptions +DescriptionWidth=70
+		AddDescription "OpenDocument Text (abrir con LibreOffice u OpenOffice)" *.odt
+		DefaultIcon /autoindex/icons/unknown.png
+		AddIconByType (TXT,/autoindex/icons/text.png) text/*
+		AddIconByType (IMG,/autoindex/icons/image.png) image/*
+		AddIconByType (SND,/autoindex/icons/sound.png) audio/*
+		AddIconByType (VID,/autoindex/icons/movie.png) video/*
+		AddIcon /autoindex/icons/back.png ..
+		AddIcon /autoindex/icons/information.png README INSTALL
+		AddIcon /autoindex/icons/dir.png ^^DIRECTORY^^
+		AddIcon /autoindex/icons/unknown.png ^^BLANKICON^^
+		AddIcon /autoindex/icons/pdf.png .pdf
+		AddIcon /autoindex/icons/doc.png .odt
+		AddIcon /autoindex/icons/compressed.png .gz .tgz .zip .rar .7z
+		AddIcon /autoindex/icons/binary.png .bin
+		AddIcon /autoindex/icons/java.png .java
+		AddIcon /autoindex/icons/js.png .java
+		AddIcon /autoindex/icons/key.png .crt .key
+		AddIcon /autoindex/icons/php.png .phps
+		AddIcon /autoindex/icons/tar.png .tar
+		RewriteEngine On
+		{ssl_force}
+		{redirect_alias}
+        </Directory>
+	{suphp}
+	Alias /autoindex/icons {alias}/icons
+	ErrorLog {logs}/{realname}.{domain}_error.log
+	CustomLog {logs}/{realname}.{domain}_access.log common
+	{ssl}
+</VirtualHost>
+
