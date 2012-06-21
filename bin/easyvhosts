@@ -64,6 +64,9 @@ for USER_NAME in $USERS; do
 	[ -d $USER_HOME/$WWW_DIR ] || continue
 	# buscar dominios del usuarios
 	for DOMAIN in `ls ${USER_HOME}/$WWW_DIR | grep -v $WWW_USER_DIR`; do
+		# verificar que no sea un directorio a excluir
+		[ `in_array $DOMAIN $WWW_EXCLUDE_DIRS` -eq 1 ] || continue
+		# Iniciar procesamiento del directorio/domin
 		log "---------------------------------------------------------------------"
 		log "Procesando dominio $DOMAIN del usuario $USER_NAME"
 		# comprobar que se tengan permisos para seguir procesando

@@ -32,7 +32,7 @@
 		AddIcon /autoindex/icons/tar.png .tar
 		RewriteEngine On
 		{ssl_force}
-		{redirect_alias}
+		{redirect_www}
         </Directory>
 	{suphp}
 	Alias /autoindex/icons {alias}/icons

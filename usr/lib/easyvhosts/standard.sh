@@ -61,6 +61,19 @@ function invertir {
 	echo $AUX
 }
 
+# $1 que
+# $2 donde
+function in_array {
+	OK=1
+	for element in $2; do
+		if [ "$element" = "$1" ]; then
+			OK=0
+			break
+		fi
+	done
+	echo $OK
+}
+
 # $1 dominio
 # $2 usuario
 function checkMapDomain {

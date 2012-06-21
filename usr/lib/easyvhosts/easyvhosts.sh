@@ -121,12 +121,12 @@ function generate_apache {
 				SSL_FORCE=""
                         fi
 			# redirigir el alias al server name
-			REDIRECT_ALIAS=`conf_get $CONF REDIRECT_ALIAS`
-			if [ "$REDIRECT_ALIAS" = "yes"  ]; then
-				log "    Redirigiendo alias"
-				REDIRECT_ALIAS="RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]\n\t\tRewriteRule ^(.*)$ http://%1/\$1 [R=301,L]"
+			REDIRECT_WWW=`conf_get $CONF REDIRECT_WWW`
+			if [ "$REDIRECT_WWW" = "yes"  ]; then
+				log "    Forzando el no uso de www"
+				REDIRECT_WWW="RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]\n\t\tRewriteRule ^(.*)$ http://%1/\$1 [R=301,L]"
 			else
-				REDIRECT_ALIAS=""
+				REDIRECT_WWW=""
 			fi
 			# si se require utilizar o no suphp
                         SUPHP=`conf_get $CONF SUPHP`
@@ -155,7 +155,7 @@ function generate_apache {
 	                file_replace $AUX_SSL alias "$ALIAS_DIR"
         	        file_replace $AUX_SSL logs "$2/logs"
 			file_replace $AUX_SSL port 443
-			file_replace $AUX_SSL redirect_alias "$REDIRECT_ALIAS"
+			file_replace $AUX_SSL redirect_www "$REDIRECT_WWW"
 			file_replace $AUX_SSL suphp "$SUPHP"
                 	file_replace $AUX_SSL ssl "$SSL"
 	                file_replace $AUX_SSL ssl_force ""
@@ -173,7 +173,7 @@ function generate_apache {
                 file_replace $AUX alias "$ALIAS_DIR"
                 file_replace $AUX logs "$2/logs"
 		file_replace $AUX port 80
-		file_replace $AUX redirect_alias "$REDIRECT_ALIAS"
+		file_replace $AUX redirect_www "$REDIRECT_WWW"
 		file_replace $AUX suphp "$SUPHP"
                 file_replace $AUX ssl ""
                 file_replace $AUX ssl_force "$SSL_FORCE"
