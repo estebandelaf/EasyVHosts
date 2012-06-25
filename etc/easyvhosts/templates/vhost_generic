@@ -9,7 +9,7 @@
 		AddType text/html .php
 		HeaderName /autoindex/header.php
 		ReadmeName /autoindex/footer.php
-		IndexIgnore autoindex
+		IndexIgnore autoindex robots.txt
 		IndexOptions +DescriptionWidth=70
 		AddDescription "OpenDocument Text (abrir con LibreOffice u OpenOffice)" *.odt
 		DefaultIcon /autoindex/icons/unknown.png
