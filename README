@@ -54,6 +54,30 @@ más el dominio terminando en la extensión correspondiente, un ejemplo:
            blog.delaf.cl.crt blog.delaf.cl.key
        (certificado firmado) (clave privada)
 
+1.4. Autoindex
+
+Si existe un directorio autoindex (en la raiz del subdominio) y dentro
+un archivo header.php o footer.php se utilizará para reemplazar en el
+Index generado por Apache en caso de no encontrar uno (que no exista
+index.html o index.php básicamente). Esta carpeta estará oculta en el
+listado. Un ejemplo:
+
+                     /home/delaf/www
+                            |
+                         delaf.cl
+                            |
+                         htdocs
+                            |
+                          debian
+                            |
+                        autoindex
+                        |       |
+                 header.php    footer.php
+
+Si se quiere utilizar una imagen o un archivo css (u otra cosa),
+dejarla dentro del directorio autoindex.
+
+
 2. Configuración mediante archivos
 
 Actualmente solo se puede personalizar la configuración para Apache.
