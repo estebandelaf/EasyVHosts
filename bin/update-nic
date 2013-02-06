@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Easy Virtual Hosts
-# Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]sasco.cl)
+# Copyright (C) 2012 Esteban De La Fuente Rubio (esteban[at]sasco.cl)
 #
 # Este programa es software libre: usted puede redistribuirlo y/o modificarlo
 # bajo los términos de la Licencia Pública General GNU publicada
@@ -34,11 +34,6 @@
 PREFIX="/home/delaf/app"
 # Definir prefijo completo en caso que se haya definido uno
 if [ -n "$PREFIX" ]; then PREFIX="$PREFIX/easyvhosts"; fi
-# Directorio de plantillas para archivos de configuración
-TEMPLATE_DIR="$PREFIX/etc/easyvhosts/templates"
-# Servicios que deben ser recargados al terminar de generar las
-# configuraciones
-SERVICES=(named httpd nginx)
 
 # Cargar archivo de configuración de la aplicación
 . $PREFIX/etc/easyvhosts/easyvhosts.conf
@@ -46,13 +41,7 @@ SERVICES=(named httpd nginx)
 # Incluir bibliotecas necesarias para la ejecución, funciones
 # básicamente
 . $PREFIX/usr/lib/easyvhosts/standard.sh
-. $PREFIX/usr/lib/easyvhosts/easyvhosts.sh
-
-# limpiar archivos autogenerados
-rm -f $BIND_DIR/internal/*
-rm -f $BIND_DIR/external/*
-rm -f $APACHE_DIR/easyvhosts*.conf
-rm -f $NGINX_DIR/easyvhosts*.conf
+. $PREFIX/usr/lib/easyvhosts/nic.sh
 
 # buscar usuarios con id igual o mayor a FROM_UID
 USERS=`awk -F : -v uid_from=$UID_FROM -v uid_to=$UID_TO '{if($3>=uid_from&&$3<=uid_to)print $1}' /etc/passwd`
@@ -67,30 +56,18 @@ for USER_NAME in $USERS; do
 	for DOMAIN in `ls ${USER_HOME}/$WWW_DIR | grep -v $WWW_USER_DIR`; do
 		# verificar que no sea un directorio a excluir
 		[ `in_array $DOMAIN $WWW_EXCLUDE_DIRS` -eq 1 ] || continue
+		# verificar que sean dominios
+		[ `echo $DOMAIN | grep -q .cl$; echo $?` -eq 1 ] && continue
 		# Iniciar procesamiento del directorio/domin
 		log "---------------------------------------------------------------------"
 		log "Procesando dominio $DOMAIN del usuario $USER_NAME"
 		# comprobar que se tengan permisos para seguir procesando
 		if [ `checkMapDomain $DOMAIN $USER_NAME` -eq 0 ]; then
-			# directorio donde se encuentra el dominio
-			DOMAIN_DIR="${USER_HOME}/$WWW_DIR/$DOMAIN"
-			# generar zonas para dns
-			generate_bind $DOMAIN
-			# si el dominio no tiene directorio de dominios virtuales se omite
-			[ -d $DOMAIN_DIR/$WWW_VHOST_DIR ] || continue
-			# generar dominios virtuales
-			generate_vhosts $DOMAIN $DOMAIN_DIR $USER_NAME
+			DOMAIN_NAME=${DOMAIN/.cl/}
+			update_nic $DOMAIN_NAME
 		else
 			log " Usuario $USER_NAME no tiene asociado $DOMAIN (no se procesará)"
 		fi
 	done
-done
-
-# fijar permisos
-chgrp named $BIND_DIR -R
-
-# actualizar configuracion servicios relacionados
-for SERVICE in ${SERVICES[@]}; do
-	service $SERVICE reload
 done
 

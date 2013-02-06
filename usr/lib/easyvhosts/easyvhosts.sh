@@ -59,12 +59,16 @@ function generate_bind {
 # $1 Nombre del dominio
 # $2 Ubicación del dominio
 # $3 Usuario
-function generate_apache {
+function generate_vhosts {
         # mensaje de registro
         log " Generando dominios virtuales para $1"
-        # archivo de configuracion apache para este dominio
+        # archivo de configuración apache para este dominio
         VHOST_FILE="$APACHE_DIR/easyvhosts_$1.conf"
         echo -n > $VHOST_FILE
+	# archivo de configuración
+	if [ -d $NGINX_DIR ]; then
+		NGINX_FILE="$NGINX_DIR/easyvhosts_$1.conf"
+	fi
         # buscar dominios virtuales (cada uno de los directorios en htdocs)
         DOMAINS=`ls $2/$WWW_VHOST_DIR`
         for REAL_NAME in $DOMAINS; do
@@ -154,7 +158,7 @@ function generate_apache {
                 	file_replace $AUX_SSL realname "$REAL_NAME"
 	                file_replace $AUX_SSL alias "$ALIAS_DIR"
         	        file_replace $AUX_SSL logs "$2/logs"
-			file_replace $AUX_SSL port 443
+			file_replace $AUX_SSL port $HTTPS_PORT
 			file_replace $AUX_SSL redirect_www "$REDIRECT_WWW"
 			file_replace $AUX_SSL suphp "$SUPHP"
                 	file_replace $AUX_SSL ssl "$SSL"
@@ -172,7 +176,7 @@ function generate_apache {
                 file_replace $AUX realname "$REAL_NAME"
                 file_replace $AUX alias "$ALIAS_DIR"
                 file_replace $AUX logs "$2/logs"
-		file_replace $AUX port 80
+		file_replace $AUX port $HTTP_PORT
 		file_replace $AUX redirect_www "$REDIRECT_WWW"
 		file_replace $AUX suphp "$SUPHP"
                 file_replace $AUX ssl ""
@@ -181,6 +185,26 @@ function generate_apache {
                 cat $AUX >> $VHOST_FILE
                 # borrar archivo auxiliar
                 rm -f $AUX
+		# generar dominio para nginx
+		if [ -d $NGINX_DIR ]; then
+			log "   Generando configuración para nginx"
+			# copiar plantilla a archivo auxiliar
+	                TEMPLATE="$TEMPLATE_DIR/nginx_server"
+        	        AUX="/tmp/$DOMAIN.$1"
+                	cp $TEMPLATE $AUX
+			# reemplazar campos en la plantilla
+	                file_replace $AUX servername "$SERVER_NAME"
+        	        file_replace $AUX serveralias "$SERVER_ALIAS"
+                	#file_replace $AUX root "$2/$WWW_VHOST_DIR/$REAL_NAME"
+                	#file_replace $AUX domain "$1"
+	                #file_replace $AUX realname "$REAL_NAME"
+        	        #file_replace $AUX logs "$2/logs"
+			file_replace $AUX port 80
+                	# agregar configuracion en el archivo de nginx para el dominio
+	                cat $AUX >> $NGINX_FILE
+	                # borrar archivo auxiliar
+        	        rm -f $AUX
+		fi
         done
         # crear directorio para logs
         mkdir -p $2/logs
