@@ -54,6 +54,12 @@ rm -f $BIND_DIR/external/*
 rm -f $APACHE_DIR/easyvhosts*.conf
 rm -f $NGINX_DIR/easyvhosts*.conf
 
+# crear archivos vacíos
+mkdir -p $BIND_DIR/internal
+mkdir -p $BIND_DIR/external
+touch $BIND_DIR/internal/zones.conf
+touch $BIND_DIR/external/zones.conf
+
 # buscar usuarios con id igual o mayor a FROM_UID
 USERS=`awk -F : -v uid_from=$UID_FROM -v uid_to=$UID_TO '{if($3>=uid_from&&$3<=uid_to)print $1}' /etc/passwd`
 
