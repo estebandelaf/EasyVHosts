@@ -1,0 +1,132 @@
+Easy Virtual Hosts Install
+
+Estas instrucciones están hechas para instalar EasyVHosts sobre un
+sistema CentOS 6.2, sin embargo la aplicación funcionará igualmente
+en otras distribuciones debiendo ajustar los nombres de los paquetes
+a instalar y las rutas de las configuraciones.
+
+Una vez terminado de instalar se deberá configurar, para esto se
+deben editar los archivos (dentro del directorio easyvhosts),
+cambiando como mínimo lo que se menciona a continuación:
+
+bin/easyvhosts			Cambiar PREFIX
+etc/easyvhosts/easyvhosts.conf	Cambiar IPs
+
+Para ejemplos del uso desde el punto de vista del usuario que creará
+los dominios revisar el sitio web:
+
+  http://dev.sasco.cl/easyvhosts
+
+1. APACHE
+
+A continuación se muestra la instalación y configuración de Apache y
+PHP, este último se instala por su extenso uso en las aplicaciones y
+sitios web (se "podría" omitir por completo o ciertos paquetes no
+deseados, como php-pgsql que es para conexiones a PostgreSQL).
+
+Instalación:
+# yum install httpd mod_ssl php php-pear php-gd php-pgsql
+# chkconfig httpd on
+# service httpd start
+
+Modificar archivo /etc/httpd/conf/httpd.conf
+Descomentar: NameVirtualHost *:80
+Agregar: NameVirtualHost *:443
+
+Agregar página por defecto:
+Archivo /etc/httpd/conf.d/000-default.conf
+<VirtualHost *:80>
+        ServerName localhost
+        DocumentRoot /var/www/html
+</VirtualHost>
+
+Agregar página SSL por defecto (en realidad solo cambiar el nombre):
+# mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/000-default-ssl.conf
+
+Quitar archivo welcome.conf (el que muestra página de CentOS)
+rm /etc/httpd/conf.d/welcome.conf
+
+Instalar paquetes de PHP Pear:
+# pear install Mail
+# pear install Mail_Mime
+
+2. BIND
+
+Se utilizará la versión enjaulada, sin embargo igualmente se puede
+utilizar la no enjaulada (cambiando directorios obviamente).
+
+Instalación:
+# yum install bind-chroot bind-utils
+# chkconfig named on
+# service named start
+
+Preparación de directorios y archivos:
+# mkdir -p /var/named/chroot/var/named/zones/master/generated/external
+# mkdir -p /var/named/chroot/var/named/zones/master/generated/internal
+# mkdir -p /var/named/chroot/var/named/zones/master/static/external
+# mkdir -p /var/named/chroot/var/named/zones/master/static/internal
+# touch /var/named/chroot/var/named/zones/master/static/external/zones.conf
+# touch /var/named/chroot/var/named/zones/master/static/internal/zones.conf
+
+EasyVhosts generará archivos de configuración para dos vistas, una
+dentro de la LAN (internal) y otra para consultas desde fuera de la
+LAN (external). En el archivo /var/named/chroot/etc/named.conf, se
+deberán agregar las dos vistas con los respectivos archivos que se
+deben incluir para cargar las configuraciones. A continuación un
+ejemplo de esto:
+
+// clientes de la red local
+acl clients {
+        127.0.0.1;
+        ::1;
+        172.16.0.0/16;
+};
+
+// vista para la red interna
+view "internal" {
+        match-clients { clients; };
+        // Zonas estándares
+        zone "." IN {
+                type hint;
+                file "named.ca";
+        };
+        include "/etc/named.rfc1912.zones";
+        // Zonas estáticas
+        include "zones/master/static/internal/zones.conf";
+        // Zonas generadas
+        include "zones/master/generated/internal/zones.conf";
+};
+
+// vista para la red externa
+view "external" {
+        match-clients { any; };
+        // Zonas estáticas
+        include "zones/master/static/external/zones.conf";
+        // Zonas generadas
+        include "zones/master/generated/external/zones.conf";
+};
+
+Notar que se incluyen archivos para zonas estáticas, estas no
+serán modificadas por EasyVhosts, esto en caso que el administrador
+requiera generar alguna zona sin hacer uso de EasyVHosts. Dentro de
+estas zonas estáticas se deberá definir como mínimo en la vista
+"internal" una zona para la resolución inversa de la red LAN, un
+ejemplo:
+
+Archivo /home/delaf/backup/named/zones/master/static/internal/zones.conf 
+zone "1.16.172.in-addr.arpa" {
+        type master;
+        file "zones/master/static/internal/1.16.172.addr";
+};
+
+Archivo /home/delaf/backup/named/zones/master/static/internal/1.16.172.addr
+$TTL 3600
+@       IN SOA delaf.cl. root ( ; Autoridad para la zona
+                2012061701      ; Serial
+                3H              ; Cada cuanto consultará
+                1H              ; Cada cuanto reintentará
+                1W              ; Cuando dejara de preguntar
+                1D )            ; Tiempo mínimo en el cache
+@       IN NS   delaf.cl.
+1       IN PTR  killua.delaf.cl.
+
