@@ -25,35 +25,38 @@
 
 # $1 Nombre del dominio
 function generate_bind {
-        # mensaje de registro
-        log " Generando zonas de dns para dominio $1"
-        # plantillas
-        ZONE_BODY_FILE="$TEMPLATE_DIR/zone_body"
-        ZONE_HEADER_INTERNAL_FILE="$TEMPLATE_DIR/zone_header_internal"
-        ZONE_HEADER_EXTERNAL_FILE="$TEMPLATE_DIR/zone_header_external"
-        AUX="/tmp/$1"
-        # crear detalle de la zona interna
-        cp $ZONE_BODY_FILE $AUX
-        file_replace $AUX domain $1
-        file_replace $AUX ip $IP_INTERNAL
-        file_replace $AUX serial `date +%Y%m%d%H`
-        mv $AUX $BIND_DIR/internal/$1
-        # crear detalle de la zona externa
-        cp $ZONE_BODY_FILE $AUX
-        file_replace $AUX domain $1
-        file_replace $AUX ip $IP_EXTERNAL
-        file_replace $AUX serial `date +%Y%m%d%H`
-        mv $AUX $BIND_DIR/external/$1
-        # agregar zona al archivo de definición de zonas internas
-        cp $ZONE_HEADER_INTERNAL_FILE $AUX
-        file_replace $AUX domain $1
-        cat $AUX >> $BIND_DIR/internal/zones.conf
-        # agregar zona al archivo de definición de zonas externas
-        cp $ZONE_HEADER_EXTERNAL_FILE $AUX
-        file_replace $AUX domain $1
-        cat $AUX >> $BIND_DIR/external/zones.conf
-        # eliminar auxiliar
-        rm -f $AUX
+	# generar configuración de bind solo si existe su directorio
+	if [ -d $BIND_DIR ]; then
+		# mensaje de registro
+		log " Generando zonas de dns para dominio $1"
+		# plantillas
+		ZONE_BODY_FILE="$TEMPLATE_DIR/zone_body"
+		ZONE_HEADER_INTERNAL_FILE="$TEMPLATE_DIR/zone_header_internal"
+		ZONE_HEADER_EXTERNAL_FILE="$TEMPLATE_DIR/zone_header_external"
+		AUX="/tmp/$1"
+		# crear detalle de la zona interna
+		cp $ZONE_BODY_FILE $AUX
+		file_replace $AUX domain $1
+		file_replace $AUX ip $IP_INTERNAL
+		file_replace $AUX serial `date +%Y%m%d%H`
+		mv $AUX $BIND_DIR/internal/$1
+		# crear detalle de la zona externa
+		cp $ZONE_BODY_FILE $AUX
+		file_replace $AUX domain $1
+		file_replace $AUX ip $IP_EXTERNAL
+		file_replace $AUX serial `date +%Y%m%d%H`
+		mv $AUX $BIND_DIR/external/$1
+		# agregar zona al archivo de definición de zonas internas
+		cp $ZONE_HEADER_INTERNAL_FILE $AUX
+		file_replace $AUX domain $1
+		cat $AUX >> $BIND_DIR/internal/zones.conf
+		# agregar zona al archivo de definición de zonas externas
+		cp $ZONE_HEADER_EXTERNAL_FILE $AUX
+		file_replace $AUX domain $1
+		cat $AUX >> $BIND_DIR/external/zones.conf
+		# eliminar auxiliar
+		rm -f $AUX
+	fi
 }
 
 # $1 Nombre del dominio
