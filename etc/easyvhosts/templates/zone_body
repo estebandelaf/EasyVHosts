@@ -21,13 +21,13 @@ $ORIGIN {domain}.
 		IN MX	3	aspmx4.googlemail.com.
 		IN MX	3	aspmx5.googlemail.com.
 
-*		IN MX	1	aspmx.l.google.com.
-*		IN MX	2	alt1.aspmx.l.google.com.
-*		IN MX	2	alt2.aspmx.l.google.com.
-*		IN MX	3	aspmx2.googlemail.com.
-*		IN MX	3	aspmx3.googlemail.com.
-*		IN MX	3	aspmx4.googlemail.com.
-*		IN MX	3	aspmx5.googlemail.com.
+;*		IN MX	1	aspmx.l.google.com.
+;*		IN MX	2	alt1.aspmx.l.google.com.
+;*		IN MX	2	alt2.aspmx.l.google.com.
+;*		IN MX	3	aspmx2.googlemail.com.
+;*		IN MX	3	aspmx3.googlemail.com.
+;*		IN MX	3	aspmx4.googlemail.com.
+;*		IN MX	3	aspmx5.googlemail.com.
 
 *		IN CNAME	{domain}.
 mail            IN CNAME	ghs.google.com.

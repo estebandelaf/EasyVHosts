@@ -40,4 +40,3 @@
 	CustomLog {logs}/{realname}.{domain}_access.log common
 	{ssl}
 </VirtualHost>
-
