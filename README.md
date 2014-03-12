@@ -117,41 +117,47 @@ ejemplo:
                          cl.delaf
                             |
                            conf
-			    |
+                            |
                           httpd
                             |
                     www.delaf.cl.conf
 
-Dentro del archivo www.delaf.cl.conf:
-ALIASES=*
-REDIRECT_WWW=yes
-SSL_FORCE=yes
-SUPHP=yes
+Dentro del archivo www.delaf.cl.conf se puede utilizar:
 
-ALIASES		Indica a que otros nombres responde el dominio, si 
-		es * responderá a cualquier nombre que no haya sido
-		definido por otro subdominio. Otra alternativa es
-		especificar un listado separado por espacio de los
-		subdominios (no se coloca el dominio).
-		Ejemplos:
-			ALIASES=*
-			ALIASES=www2
-			ALIASES=www2 www3
-		Default:
+	ALIASES=*
+	REDIRECT_WWW=yes
+	SSL_FORCE=yes
+	SUPHP=yes
 
-REDIRECT_WWW	Indica si al utilizar www este será redireccionado
-		al dominio pricipal, esto en caso que se quiera "evitar"
-		que se acceda mediante www.example.com.
-		Default: no
+*	**ALIASES**: indica a que otros nombres responde el dominio, si es *
+	responderá a cualquier nombre que no haya sido definido por otro
+	subdominio. Otra alternativa es especificar un listado separado por
+	espacio de los 	subdominios (no se coloca el dominio).
 
-SSL_FORCE=yes	Fuerza el uso de HTTPS si el usuario entra mediante HTTP,
-		requiere que exista un certificado en el directorio ssl
-		que este asociado al dominio.
-		Default: no
+	Ejemplos:
 
-SUPHP=yes	Indica si se debe utilizar SuPHP para servir las páginas
-		PHP del dominio.
-		Defaultl: no
+		ALIASES=*
+		ALIASES=www2
+		ALIASES=www2 www3
+
+	Default:
+
+*	**REDIRECT_WWW**: indica si al utilizar www este será redireccionado
+	al dominio pricipal, esto en caso que se quiera "evitar" que se acceda
+	mediante www.example.com.
+
+	Default: no
+
+*	**SSL_FORCE**: fuerza el uso de HTTPS si el usuario entra mediante HTTP,
+	requiere que exista un certificado en el directorio ssl que este
+	asociado al dominio.
+
+	Default: no
+
+*	**SUPHP**: indica si se debe utilizar SuPHP para servir las páginas PHP
+	del dominio.
+	
+	Defaultl: no
 
 Ejecución
 ---------
