@@ -158,13 +158,6 @@ Ejecución
 
 Para generar los archivos de configuración y recargar los servicios basta
 ejecutar el script easyvhosts dentro del directorio bin, o sea estándo dentro
-del directorio easyvhosts (si se usa como esta por defecto) se puede hacer:
+del directorio easyvhosts (si se usa como esta por defecto) se puede hacer con:
 
-sudo bin/easyvhosts	<- En caso de usuario normal con sudo
-bin/easyvhosts		<- En caso de usuario root
-
-Para más información visitar la página del proyecto:
-
-  http://dev.sasco.cl/easyvhosts
-
-by Esteban De La Fuente Rubio
+	# bin/easyvhosts
