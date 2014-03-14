@@ -132,13 +132,15 @@ Dentro del archivo www.delaf.cl.conf se puede utilizar:
 *	**ALIASES**: indica a que otros nombres responde el dominio, si es *
 	responderá a cualquier nombre que no haya sido definido por otro
 	subdominio. Otra alternativa es especificar un listado separado por
-	espacio de los 	subdominios (no se coloca el dominio).
+	espacio de los 	subdominios (no se coloca el dominio) o bien dominios
+	completos.
 
 	Ejemplos:
 
 		ALIASES=*
 		ALIASES=www2
 		ALIASES=www2 www3
+		ALIASES=www2 www3 otrodominio.com www.otrodominio.com
 
 	Default:
 

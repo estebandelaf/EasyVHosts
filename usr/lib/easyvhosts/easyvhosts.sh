@@ -111,13 +111,16 @@ function generate_vhosts {
                 CONF="$2/conf/httpd/$REAL_NAME.$1.conf"
                 if [ -f $CONF  ]; then
                         log "   Se encontró configuración personalizada"
-                        # subdominios (alias) asociados a este dominio
+                        # alias (subdominios del mismo u otros dominios) asociados a este dominio
                         ALIASES=`conf_get $CONF ALIASES`
                         if [ -n "$ALIASES" ]; then
 				log "    Cargando alias para el dominio"
-                                for ALIAS in "$ALIASES"; do
-                                        SERVER_ALIAS="$SERVER_ALIAS $ALIAS.$1"
-                                done
+				for ALIAS in $ALIASES; do
+					if [[ $ALIAS != *.* ]]; then
+						ALIAS=$ALIAS.$1
+					fi
+					SERVER_ALIAS="$SERVER_ALIAS $ALIAS"
+				done
                         fi
 			# si existen cerfificados ssl y se fuerza ssl se configura
                         SSL_FORCE=`conf_get $CONF SSL_FORCE`
