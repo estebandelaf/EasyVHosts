@@ -67,15 +67,14 @@ function generate_vhosts {
         log " Generando dominios virtuales para $1"
         # archivo de configuración apache para este dominio
         VHOST_FILE="$APACHE_DIR/easyvhosts_$1.conf"
-        echo -n > $VHOST_FILE
-	# archivo de configuración
-	if [ -d $NGINX_DIR ]; then
-		NGINX_FILE="$NGINX_DIR/easyvhosts_$1.conf"
-	fi
+        # archivo de configuración
+        if [ -d $NGINX_DIR ]; then
+                NGINX_FILE="$NGINX_DIR/easyvhosts_$1.conf"
+        fi
         # buscar dominios virtuales (cada uno de los directorios en htdocs)
         DOMAINS=`ls $2/$WWW_VHOST_DIR`
         for REAL_NAME in $DOMAINS; do
-		DOMAIN=`invertir $REAL_NAME`
+                DOMAIN=`invertir $REAL_NAME`
                 log "  Procesando el dominio $DOMAIN.$1"
                 # copiar plantilla a archivo auxiliar
                 TEMPLATE="$TEMPLATE_DIR/vhost_generic"
