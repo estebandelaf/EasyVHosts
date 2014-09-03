@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Easy Virtual Hosts
-# Copyright (C) 2013 Esteban De La Fuente Rubio (esteban[at]sasco.cl)
+# Copyright (C) 2014 Esteban De La Fuente Rubio (esteban[at]sasco.cl)
 #
 # Este programa es software libre: usted puede redistribuirlo y/o modificarlo
 # bajo los términos de la Licencia Pública General GNU publicada
@@ -24,16 +24,8 @@
 # Visite http://dev.sasco.cl/easyvhosts para más detalles.
 #
 
-# Prefijo para la ubicación de la aplicación, esto solo en el caso
-# que la aplicación no sea instalada directamente en el directorio
-# raiz (donde es PREFIX=""), se debe indicar el directorio padre
-# donde ubicar la aplicación y automáticamente se creará dentro de
-# la misma un directorio easyvhosts con el resto de los archivos
-# Este valor deberá ser establecido al momento de la instalación
-# de la aplicación
-PREFIX="/home/delaf/app"
-# Definir prefijo completo en caso que se haya definido uno
-if [ -n "$PREFIX" ]; then PREFIX="$PREFIX/easyvhosts"; fi
+# Prefijo para la ubicación de la aplicación
+PREFIX=$(dirname $(cd $(dirname $0) && pwd))
 # Directorio de plantillas para archivos de configuración
 TEMPLATE_DIR="$PREFIX/etc/easyvhosts/templates"
 
