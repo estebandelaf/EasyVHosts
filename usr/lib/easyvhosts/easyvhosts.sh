@@ -94,7 +94,7 @@ function generate_vhosts {
 			# ubicación certificados
 			CRT="$2/ssl/$REAL_NAME.$1.crt"
 			KEY="$2/ssl/$REAL_NAME.$1.key"
-                        # verifica rque la llave no se encuentre encriptada
+                        # verificar que la llave no se encuentre encriptada
 			if [ -n "`cat $KEY | grep ENCRYPTED`" ]; then
 				log "    Clave privada se encuentra encriptada, no se usará SSL"
 				SSL=""
