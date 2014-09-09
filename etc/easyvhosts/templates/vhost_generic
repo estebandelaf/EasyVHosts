@@ -1,9 +1,9 @@
 <VirtualHost *:{port}>
-        ServerName {servername}
+	ServerName {servername}
 	ServerAlias {serveralias}
-        DocumentRoot {root}
+	DocumentRoot {root}
 	<Directory {root}>
-                Options Indexes FollowSymLinks MultiViews
+		Options Indexes FollowSymLinks
 		AllowOverride all
 		IndexOptions FancyIndexing FoldersFirst VersionSort XHTML Charset=UTF-8
 		AddType text/html .php
@@ -33,7 +33,7 @@
 		RewriteEngine On
 		{ssl_force}
 		{redirect_www}
-        </Directory>
+	</Directory>
 	{suphp}
 	Alias /autoindex/icons {alias}/icons
 	ErrorLog {logs}/{realname}.{domain}_error.log

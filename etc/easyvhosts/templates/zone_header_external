@@ -5,4 +5,3 @@ zone "{domain}" {
 //	also-notify { 200.1.123.7; };
 //	allow-transfer { 200.1.123.7; };
 };
-

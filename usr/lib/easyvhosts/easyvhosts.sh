@@ -154,7 +154,7 @@ function generate_vhosts {
 		# si existe ssl para este dominio habilitar
 		if [ -n "$SSL" ]; then 
 			AUX_SSL="$AUX-ssl"
-			cp $AUX  $AUX_SSL
+			cp $AUX $AUX_SSL
                 	# remplazar campos en la plantilla
 	                file_replace $AUX_SSL servername "$SERVER_NAME"
         	        file_replace $AUX_SSL serveralias "$SERVER_ALIAS"

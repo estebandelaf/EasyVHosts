@@ -33,4 +33,3 @@ $ORIGIN {domain}.
 mail            IN CNAME	ghs.google.com.
 docs            IN CNAME	ghs.google.com.
 calendar	IN CNAME	ghs.google.com.
-
