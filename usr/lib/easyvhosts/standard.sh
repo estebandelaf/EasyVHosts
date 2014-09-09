@@ -38,7 +38,7 @@ function file_replace {
 # $2 Variable que se busca
 # $3 Valor por defecto en caso que la variable no se encuentre
 function conf_get {
-        awk -F = -v var=$2 '{if($1==var)print $2}' $1
+        awk -F = -v var=$2 '{if($1==var)print $2}' $1 | sed -e 's/^ *//' -e 's/ *$//'
 }
 
 # $1 Mensaje a enviar al log
