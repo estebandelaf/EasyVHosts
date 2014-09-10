@@ -1,0 +1,7 @@
+<VirtualHost *:{port}>
+	ServerName {servername}
+	ServerAlias {serveralias}
+	RewriteEngine On
+	RewriteCond %{HTTPS} off
+	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+</VirtualHost>

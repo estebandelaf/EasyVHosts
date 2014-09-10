@@ -65,8 +65,8 @@ Lo anterior asume que se configuró el puerto 8080 en Apache.
 
 ### Certificados SSL
 
-Estos irán en el directorio ssl y tendrán como nombre el subdominio más el
-dominio terminando en la extensión correspondiente, un ejemplo:
+Estos irán en el directorio ssl y tendrán como nombre el subdominio y 
+terminando en la extensión correspondiente, un ejemplo:
 
                      /home/delaf/www
                             |
@@ -74,7 +74,7 @@ dominio terminando en la extensión correspondiente, un ejemplo:
                             |
                            ssl
                            | |
-           blog.delaf.cl.crt blog.delaf.cl.key
+                    blog.crt blog.key
        (certificado firmado) (clave privada)
 
 ### Autoindex
@@ -107,10 +107,9 @@ Actualmente solo se puede personalizar la configuración para Apache.
 ### Apache
 
 El directorio de configuración por dominio es conf/httpd y se deberá colocar un
-archivo por cada subdominio, con el nombre del subdominio, el dominio y
-extensión .conf Dentro del archivo se podrán definir ciertas opciones que
-modificarán la creación de la configuración para Apache para dicho dominio. Un
-ejemplo:
+archivo por cada subdominio, con el nombre del subdominio y la extensión .conf 
+Dentro del archivo se podrán definir ciertas opciones que modificarán la 
+creación de la configuración para Apache para dicho dominio. Un ejemplo:
 
                      /home/delaf/www
                             |
@@ -120,9 +119,9 @@ ejemplo:
                             |
                           httpd
                             |
-                    www.delaf.cl.conf
+                         www.conf
 
-Dentro del archivo www.delaf.cl.conf se puede utilizar:
+Dentro del archivo www.conf se puede utilizar:
 
 	ALIASES=*
 	REDIRECT_WWW=yes
@@ -154,7 +153,7 @@ Dentro del archivo www.delaf.cl.conf se puede utilizar:
 	requiere que exista un certificado en el directorio ssl que este
 	asociado al dominio.
 
-	Default: no
+	Default: yes
 
 *	**SUPHP**: indica si se debe utilizar SuPHP para servir las páginas PHP
 	del dominio.
