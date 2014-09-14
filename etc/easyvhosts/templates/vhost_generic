@@ -31,6 +31,15 @@
 		AddIcon /autoindex/icons/php.png .phps
 		AddIcon /autoindex/icons/tar.png .tar
 	</Directory>
+	<IfModule mod_deflate.c>
+		SetOutputFilter DEFLATE
+		SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|ico|png)$ \ no-gzip dont-vary
+		SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ \no-gzip dont-vary
+		SetEnvIfNoCase Request_URI \.pdf$ no-gzip dont-vary
+		BrowserMatch ^Mozilla/4 gzip-only-text/html
+		BrowserMatch ^Mozilla/4\.0[678] no-gzip
+		BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+	</IfModule>
 	{suphp}
 	Alias /autoindex/icons {alias}/icons
 	ErrorLog {logs}/{realname}.{domain}_error.log
