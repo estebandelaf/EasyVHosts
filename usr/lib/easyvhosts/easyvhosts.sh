@@ -94,7 +94,7 @@ function generate_vhosts {
 			SERVER_ALIAS=""
 		fi
 		# buscar si existen certificados SSL para el dominio
-		CRT="$DOMAIN_DIR/ssl/$REAL_NAME.crt" 
+		CRT="$DOMAIN_DIR/ssl/$REAL_NAME.crt"
 		KEY="$DOMAIN_DIR/ssl/$REAL_NAME.key"
 		if [ -f "$CRT" -a -f "$KEY" ]; then
 			log "   Se encontró certificado SSL"
@@ -102,10 +102,21 @@ function generate_vhosts {
 			if [ -n "`cat $KEY | grep ENCRYPTED`" ]; then
 				log "    Encriptado, no se utilizará"
 				SSL=""
-			# llave no se encuentra encriptada	
+			# llave no se encuentra encriptada
 			else
-				# opciones para cargar el certificado
-                        	SSL="SSLEngine on\n\tSSLCertificateFile $CRT\n\tSSLCertificateKeyFile $KEY\n\tSetEnvIf User-Agent \".*MSIE.*\" nokeepalive ssl-unclean-shutdown"
+				# opciones por defecto para SSL
+				SSL="SSLEngine on\n"
+				SSL="$SSL\tSSLCertificateFile $CRT\n"
+				SSL="$SSL\tSSLCertificateKeyFile $KEY"
+				# en caso que exista archivo para Chain se
+				# agrega
+				C="$DOMAIN_DIR/ssl/${REAL_NAME}_ca.crt"
+				if [ -f "$C" ]; then
+					SSL="$SSL\n\tSSLCertificateChainFile $C"
+				fi
+				# fix para MSIE
+				SSL="$SSL\n\tSetEnvIf User-Agent \".*MSIE.*\""
+				SSL="$SSL nokeepalive ssl-unclean-shutdown"
 			fi
 		else
 			SSL=""
@@ -114,7 +125,7 @@ function generate_vhosts {
 		CONF="$DOMAIN_DIR/conf/httpd/$REAL_NAME.conf"
 		if [ -f $CONF  ]; then
 			log "   Se encontró configuración personalizada"
-			# si existen cerfificados ssl y se fuerza ssl se 
+			# si existen cerfificados ssl y se fuerza ssl se
 			# configura
 			SSL_FORCE=`conf_get $CONF SSL_FORCE "yes"`
 			if [ -n "$SSL" -a "$SSL_FORCE" = "yes" ]; then
@@ -129,7 +140,7 @@ function generate_vhosts {
 				log "    Forzando el no uso de www"
 				SERVER_ALIAS=""
 			fi
-			# alias (subdominios del mismo u otros dominios) 
+			# alias (subdominios del mismo u otros dominios)
 			# asociados a este dominio
 			ALIASES=`conf_get $CONF ALIASES`
 			if [ -n "$ALIASES" ]; then
@@ -237,7 +248,7 @@ function generate_vhosts {
 			#file_replace $AUX realname "$REAL_NAME"
 			#file_replace $AUX logs "$DOMAIN_DIR/logs"
 			file_replace $AUX port 80
-			# agregar configuracion en el archivo de nginx para el 
+			# agregar configuracion en el archivo de nginx para el
 			# dominio
 			cat $AUX >> $NGINX_FILE
 			# borrar archivo auxiliar
