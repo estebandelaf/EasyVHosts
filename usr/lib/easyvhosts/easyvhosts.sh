@@ -102,6 +102,7 @@ function generate_vhosts {
 			if [ -n "`cat $KEY | grep ENCRYPTED`" ]; then
 				log "    Encriptado, no se utilizará"
 				SSL=""
+				SSL_FORCE="no"
 			# llave no se encuentra encriptada
 			else
 				# opciones por defecto para SSL
@@ -117,9 +118,11 @@ function generate_vhosts {
 				# fix para MSIE
 				SSL="$SSL\n\tSetEnvIf User-Agent \".*MSIE.*\""
 				SSL="$SSL nokeepalive ssl-unclean-shutdown"
+				SSL_FORCE="yes"
 			fi
 		else
 			SSL=""
+			SSL_FORCE="no"
 		fi
 		# configuraciones personalizadas para el dominio virtual
 		CONF="$DOMAIN_DIR/conf/httpd/$REAL_NAME.conf"
@@ -128,11 +131,8 @@ function generate_vhosts {
 			# si existen cerfificados ssl y se fuerza ssl se
 			# configura
 			SSL_FORCE=`conf_get $CONF SSL_FORCE "yes"`
-			if [ -n "$SSL" -a "$SSL_FORCE" = "yes" ]; then
-				log "    Forzando el uso de SSL"
-				SSL_FORCE="yes"
-			else
-				SSL_FORCE="no"
+			if [ -n "$SSL" -a "$SSL_FORCE" = "no" ]; then
+				log "    El uso de SSL es opcional"
 			fi
 			# redirigir www a non-www
 			REDIRECT_WWW=`conf_get $CONF REDIRECT_WWW "no"`
@@ -160,9 +160,9 @@ function generate_vhosts {
 			else
 				SUPHP=""
 			fi
-		# si no hay archivo de configuracion se limpian variables, excepto SERVER_ALIAS que fue definida antes
+		# si no hay archivo de configuracion se limpian variables,
+		# excepto SERVER_ALIAS y SSL_FORCE que fue definida antes
 		else
-			SSL_FORCE=""
 			REDIRECT_ALIAS=""
 			SUPHP=""
 		fi
