@@ -156,7 +156,11 @@ function generate_vhosts {
 			SUPHP=`conf_get $CONF SUPHP`
 			if [ "$SUPHP" = "yes" ]; then
 				log "    Utilizando SuPHP"
-				SUPHP="php_admin_flag engine off\n\tsuPHP_Engine on\n\tAddHandler application/x-httpd-php .php\n\tsuPHP_AddHandler application/x-httpd-php\n\tsuPHP_UserGroup $USER `id $USER -ng`"
+				SUPHP="php_admin_flag engine off\n"
+				SUPHP="$SUPHP\tsuPHP_Engine on\n"
+				SUPHP="$SUPHP\tAddHandler application/x-httpd-php .php\n"
+				SUPHP="$SUPHP\tsuPHP_AddHandler application/x-httpd-php\n"
+				#SUPHP="$SUPHP\tsuPHP_UserGroup $USER `id $USER -ng`"
 			else
 				SUPHP=""
 			fi
