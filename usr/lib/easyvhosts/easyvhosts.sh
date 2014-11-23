@@ -94,6 +94,8 @@ function generate_vhosts {
 			SERVER_ALIAS=""
 		fi
 		# buscar si existen certificados SSL para el dominio
+		SSL=""
+		SSL_FORCE="no"
 		CRT="$DOMAIN_DIR/ssl/$REAL_NAME.crt"
 		KEY="$DOMAIN_DIR/ssl/$REAL_NAME.key"
 		if [ -f "$CRT" -a -f "$KEY" ]; then
@@ -101,8 +103,6 @@ function generate_vhosts {
 			# verificar que la llave no se encuentre encriptada
 			if [ -n "`cat $KEY | grep ENCRYPTED`" ]; then
 				log "    Encriptado, no se utilizará"
-				SSL=""
-				SSL_FORCE="no"
 			# llave no se encuentra encriptada
 			else
 				# opciones por defecto para SSL
@@ -120,9 +120,6 @@ function generate_vhosts {
 				SSL="$SSL nokeepalive ssl-unclean-shutdown"
 				SSL_FORCE="yes"
 			fi
-		else
-			SSL=""
-			SSL_FORCE="no"
 		fi
 		# configuraciones personalizadas para el dominio virtual
 		CONF="$DOMAIN_DIR/conf/httpd/$REAL_NAME.conf"
@@ -194,7 +191,7 @@ function generate_vhosts {
 			fi
 		fi
 		# si se debe forzar SSL solo se redirecciona
-		if [ "$SSL_FORCE" = "yes" ]; then
+		if [ -n "$SSL" -a "$SSL_FORCE" = "yes" ]; then
 			cp "$TEMPLATE_DIR/vhost/ssl_force" $AUX
 			file_replace $AUX servername "$SERVER_NAME"
 			file_replace $AUX serveralias "$SERVER_ALIAS"
