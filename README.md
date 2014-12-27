@@ -65,7 +65,7 @@ Lo anterior asume que se configuró el puerto 8080 en Apache.
 
 ### Certificados SSL
 
-Estos irán en el directorio ssl y tendrán como nombre el subdominio y 
+Estos irán en el directorio ssl y tendrán como nombre el subdominio y
 terminando en la extensión correspondiente, un ejemplo:
 
                      /home/delaf/www
@@ -107,8 +107,8 @@ Actualmente solo se puede personalizar la configuración para Apache.
 ### Apache
 
 El directorio de configuración por dominio es conf/httpd y se deberá colocar un
-archivo por cada subdominio, con el nombre del subdominio y la extensión .conf 
-Dentro del archivo se podrán definir ciertas opciones que modificarán la 
+archivo por cada subdominio, con el nombre del subdominio y la extensión .conf
+Dentro del archivo se podrán definir ciertas opciones que modificarán la
 creación de la configuración para Apache para dicho dominio. Un ejemplo:
 
                      /home/delaf/www
@@ -123,23 +123,22 @@ creación de la configuración para Apache para dicho dominio. Un ejemplo:
 
 Dentro del archivo www.conf se puede utilizar:
 
-	ALIASES=*
-	REDIRECT_WWW=yes
-	SSL_FORCE=yes
-	SUPHP=yes
+	ALIASES="*"
+	REDIRECT_WWW="yes"
+	SSL_FORCE="yes"
+	SUPHP="yes"
 
 *	**ALIASES**: indica a que otros nombres responde el dominio, si es *
 	responderá a cualquier nombre que no haya sido definido por otro
 	subdominio. Otra alternativa es especificar un listado separado por
-	espacio de los 	subdominios (no se coloca el dominio) o bien dominios
-	completos.
+	espacio de otros dominios (subdominios u otros).
 
 	Ejemplos:
 
-		ALIASES=*
-		ALIASES=www2
-		ALIASES=www2 www3
-		ALIASES=www2 www3 otrodominio.com www.otrodominio.com
+		ALIASES="*"
+		ALIASES="www2.example.com"
+		ALIASES="www2.example.com www3.example.com"
+		ALIASES="otrodominio.com www.otrodominio.com"
 
 	Default:
 
@@ -147,18 +146,18 @@ Dentro del archivo www.conf se puede utilizar:
 	al dominio pricipal, esto en caso que se quiera "evitar" que se acceda
 	mediante www.example.com.
 
-	Default: no
+	Default: "no"
 
 *	**SSL_FORCE**: fuerza el uso de HTTPS si el usuario entra mediante HTTP,
 	requiere que exista un certificado en el directorio ssl que este
 	asociado al dominio.
 
-	Default: yes
+	Default: "yes"
 
 *	**SUPHP**: indica si se debe utilizar SuPHP para servir las páginas PHP
 	del dominio.
-	
-	Defaultl: no
+
+	Defaultl: "no"
 
 Ejecución
 ---------

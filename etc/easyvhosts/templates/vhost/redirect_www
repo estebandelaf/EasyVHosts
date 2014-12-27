@@ -2,6 +2,6 @@
 	ServerName www.{domain}
 	RewriteEngine On
 	RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-	RewriteRule ^(.*)$ {protocol}://%1/$1 [R=301,L]
+	RewriteRule ^(.*)$ {protocol}://%1$1 [R=301,L]
 	{ssl}
 </VirtualHost>

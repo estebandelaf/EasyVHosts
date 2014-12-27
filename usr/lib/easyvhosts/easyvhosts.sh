@@ -95,7 +95,6 @@ function generate_vhosts {
 		fi
 		# buscar si existen certificados SSL para el dominio
 		SSL=""
-		SSL_FORCE="no"
 		CRT="$DOMAIN_DIR/ssl/$REAL_NAME.crt"
 		KEY="$DOMAIN_DIR/ssl/$REAL_NAME.key"
 		if [ -f "$CRT" -a -f "$KEY" ]; then
@@ -118,53 +117,49 @@ function generate_vhosts {
 				# fix para MSIE
 				SSL="$SSL\n\tSetEnvIf User-Agent \".*MSIE.*\""
 				SSL="$SSL nokeepalive ssl-unclean-shutdown"
-				SSL_FORCE="yes"
 			fi
 		fi
-		# configuraciones personalizadas para el dominio virtual
+		# cargar configuración para el dominio
+		# configuración por defecto:
+		ALIASES=""
+		REDIRECT_WWW="no"
+		SSL_FORCE="yes"
+		SUPHP="no"
+		# configuración personalizada:
 		CONF="$DOMAIN_DIR/conf/httpd/$REAL_NAME.conf"
 		if [ -f $CONF  ]; then
 			log "   Se encontró configuración personalizada"
-			# si existen cerfificados ssl y se fuerza ssl se
-			# configura
-			SSL_FORCE=`conf_get $CONF SSL_FORCE "yes"`
-			if [ -n "$SSL" -a "$SSL_FORCE" = "no" ]; then
-				log "    El uso de SSL es opcional"
-			fi
-			# redirigir www a non-www
-			REDIRECT_WWW=`conf_get $CONF REDIRECT_WWW "no"`
-			if [ "$REDIRECT_WWW" = "yes"  ]; then
-				log "    Forzando el no uso de www"
-				SERVER_ALIAS=""
-			fi
-			# alias (subdominios del mismo u otros dominios)
-			# asociados a este dominio
-			ALIASES=`conf_get $CONF ALIASES`
-			if [ -n "$ALIASES" ]; then
-				log "    Cargando alias para el dominio"
-				for ALIAS in $ALIASES; do
-					if [[ $ALIAS != *.* ]]; then
-						ALIAS=$ALIAS.$1
-					fi
-					SERVER_ALIAS="$SERVER_ALIAS $ALIAS"
-				done
-			fi
-			# si se require utilizar o no suphp
-			SUPHP=`conf_get $CONF SUPHP`
-			if [ "$SUPHP" = "yes" ]; then
-				log "    Utilizando SuPHP"
-				SUPHP="php_admin_flag engine off\n"
-				SUPHP="$SUPHP\tsuPHP_Engine on\n"
-				SUPHP="$SUPHP\tAddHandler application/x-httpd-php .php\n"
-				SUPHP="$SUPHP\tsuPHP_AddHandler application/x-httpd-php\n"
-				#SUPHP="$SUPHP\tsuPHP_UserGroup $USER `id $USER -ng`"
-			else
-				SUPHP=""
-			fi
-		# si no hay archivo de configuracion se limpian variables,
-		# excepto SERVER_ALIAS y SSL_FORCE que fue definida antes
+			. $CONF
+		fi
+		# si existen cerfificados ssl y se fuerza ssl se configura
+		if [ -n "$SSL" -a "$SSL_FORCE" = "no" ]; then
+			log "   El uso de SSL es opcional"
+		fi
+		# redirigir www a non-www
+		if [ "$REDIRECT_WWW" = "yes"  ]; then
+			log "   Forzando el no uso de www"
+			SERVER_ALIAS=""
+		fi
+		# alias (subdominios del mismo u otros dominios) asociados a
+		# este dominio
+		if [ -n "$ALIASES" ]; then
+			log "   Cargando alias para el dominio"
+			for ALIAS in $ALIASES; do
+				if [[ $ALIAS != *.* ]]; then
+					ALIAS=$ALIAS.$1
+				fi
+				SERVER_ALIAS="$SERVER_ALIAS $ALIAS"
+			done
+		fi
+		# si se require utilizar o no suphp
+		if [ "$SUPHP" = "yes" ]; then
+			log "   Utilizando SuPHP"
+			SUPHP="php_admin_flag engine off\n"
+			SUPHP="$SUPHP\tsuPHP_Engine on\n"
+			SUPHP="$SUPHP\tAddHandler application/x-httpd-php .php\n"
+			SUPHP="$SUPHP\tsuPHP_AddHandler application/x-httpd-php\n"
+			#SUPHP="$SUPHP\tsuPHP_UserGroup $USER `id $USER -ng`"
 		else
-			REDIRECT_ALIAS=""
 			SUPHP=""
 		fi
 		# establecer DOCUMENT_ROOT
@@ -174,7 +169,7 @@ function generate_vhosts {
 		# en caso que se deba redireccionar WWW se hace tanto para el
 		# dominio virtual en puerto estándar como para el dominio en
 		# puerto HTTPS (en caso que se esté usando
-		if [ "$REDIRECT_WWW" = "yes" ]; then
+		if [ "$SUBDOMAIN" = "$WWW_VHOST_MAIN" -a "$REDIRECT_WWW" = "yes" ]; then
 			cp "$TEMPLATE_DIR/vhost/redirect_www" $AUX
 			file_replace $AUX domain "$DOMAIN"
 			file_replace $AUX port $HTTP_PORT
