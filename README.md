@@ -7,6 +7,22 @@ formato de directorios y archivos para los dominios de los usuarios, obteniendo
 dinámicamente las características de los mismos y generando automáticamente los
 archivos de configuración para lo servicios involucrados (como httpd o named).
 
+Instalación y ejecución
+-----------------------
+
+Para instalar EasyVHosts basta clonar el proyecto:
+
+        # mkdir -p ~/app
+        # cd ~/app
+        # git clone https://github.com/sascocl/EasyVHosts.git easyvhosts
+
+Para generar los archivos de configuración y recargar los servicios basta
+ejecutar el script easyvhosts dentro del directorio bin, o sea estándo dentro
+del directorio easyvhosts (si se usa como esta por defecto) se puede hacer con:
+
+        # cd ~/app/easyvhosts
+        # bin/easyvhosts
+
 Autodetección
 -------------
 
@@ -158,12 +174,3 @@ Dentro del archivo www.conf se puede utilizar:
 	del dominio.
 
 	Defaultl: "no"
-
-Ejecución
----------
-
-Para generar los archivos de configuración y recargar los servicios basta
-ejecutar el script easyvhosts dentro del directorio bin, o sea estándo dentro
-del directorio easyvhosts (si se usa como esta por defecto) se puede hacer con:
-
-	# bin/easyvhosts
