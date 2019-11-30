@@ -125,6 +125,7 @@ function generate_vhosts {
 		REDIRECT_WWW="no"
 		SSL_FORCE="yes"
 		SUPHP="no"
+		DOCUMENT_ROOT_SUFFIX=""
 		# configuración personalizada:
 		CONF="$DOMAIN_DIR/conf/httpd/$REAL_NAME.conf"
 		if [ -f $CONF  ]; then
@@ -163,7 +164,7 @@ function generate_vhosts {
 			SUPHP=""
 		fi
 		# establecer DOCUMENT_ROOT
-		DOCUMENT_ROOT="$DOMAIN_DIR/$WWW_VHOST_DIR/$REAL_NAME"
+		DOCUMENT_ROOT="$DOMAIN_DIR/$WWW_VHOST_DIR/$REAL_NAME$DOCUMENT_ROOT_SUFFIX"
 		# remplazar campos en la plantilla
 		AUX="/tmp/$SUBDOMAIN.$DOMAIN"
 		# en caso que se deba redireccionar WWW se hace tanto para el

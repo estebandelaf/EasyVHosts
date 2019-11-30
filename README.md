@@ -174,3 +174,10 @@ Dentro del archivo www.conf se puede utilizar:
 	del dominio.
 
 	Defaultl: "no"
+
+*	**DOCUMENT_ROOT_SUFFIX**: permite definir un subdirectorio dentro del
+	directorio del dominio virtual para ser publicado como base del dominio.
+
+	Ejemplo: DOCUMENT_ROOT_SUFFIX=/public
+
+	Default:
