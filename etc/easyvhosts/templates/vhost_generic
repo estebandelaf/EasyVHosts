@@ -5,6 +5,7 @@
 	<Directory {root}>
 		Options Indexes FollowSymLinks
 		AllowOverride all
+		Require all granted
 		IndexOptions FancyIndexing FoldersFirst VersionSort XHTML Charset=UTF-8
 		AddType text/html .php
 		HeaderName /autoindex/header.php
