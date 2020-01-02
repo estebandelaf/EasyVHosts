@@ -93,7 +93,8 @@ function generate_vhosts {
 			SERVER_NAME="$SUBDOMAIN.$DOMAIN"
 			SERVER_ALIAS=""
 		fi
-		# buscar si existen certificados SSL para el dominio
+		# buscar si existen certificados SSL para el dominio en el directorio
+		# del dominio virtual
 		SSL=""
 		CRT="$DOMAIN_DIR/ssl/$REAL_NAME.crt"
 		KEY="$DOMAIN_DIR/ssl/$REAL_NAME.key"
@@ -111,6 +112,34 @@ function generate_vhosts {
 				# en caso que exista archivo para Chain se
 				# agrega
 				C="$DOMAIN_DIR/ssl/${REAL_NAME}_ca.crt"
+				if [ -f "$C" ]; then
+					SSL="$SSL\n\tSSLCertificateChainFile $C"
+				fi
+				# fix para MSIE
+				SSL="$SSL\n\tSetEnvIf User-Agent \".*MSIE.*\""
+				SSL="$SSL nokeepalive ssl-unclean-shutdown"
+			fi
+		# buscar si existen certificados SSL con Let's Encrypt
+		# WARNING no busca el certificado para www, se asume que los www
+		# serán redireccionados, si hay un www se buscará sólo como el
+		# dominio (sin www.)
+		else
+			if [ $SUBDOMAIN = "www" ]; then
+				LETSENCRYPT_DIR="/etc/letsencrypt/live/$DOMAIN"
+			else
+				LETSENCRYPT_DIR="/etc/letsencrypt/live/$SUBDOMAIN.$DOMAIN"
+			fi
+			CRT="$LETSENCRYPT_DIR/cert.pem"
+			KEY="$LETSENCRYPT_DIR/privkey.pem"
+			if [ -f "$CRT" -a -f "$KEY" ]; then
+				log "   Se encontró certificado SSL (by Let's Encrypt)"
+				# opciones por defecto para SSL
+				SSL="SSLEngine on\n"
+				SSL="$SSL\tSSLCertificateFile $CRT\n"
+				SSL="$SSL\tSSLCertificateKeyFile $KEY"
+				# en caso que exista archivo para Chain se
+				# agrega
+				C="$LETSENCRYPT_DIR/chain.pem"
 				if [ -f "$C" ]; then
 					SSL="$SSL\n\tSSLCertificateChainFile $C"
 				fi
