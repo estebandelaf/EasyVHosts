@@ -181,3 +181,23 @@ Dentro del archivo www.conf se puede utilizar:
 	Ejemplo: DOCUMENT_ROOT_SUFFIX=/public
 
 	Default:
+
+SSL con Let's Encrypt
+---------------------
+
+EasyVHosts puede utilizar certificados SSL generados con Let's Encrypt. Sólo se
+deben crear los certificados y se podrán usar con este script.
+
+Para crear los certificados usar:
+
+	# certbot certonly --standalone --preferred-challenges http -d sasco.cl \
+	  --pre-hook "service apache2 stop" --post-hook "service apache2 start"
+
+Para renovar el certificado usar:
+
+	# certbot certonly --standalone -n --preferred-challenges http -d sasco.cl \
+	  --pre-hook "service apache2 stop" --post-hook "service apache2 start"
+
+Se agrega un parámetro `-n` para la renovación.
+
+Por supuesto, cambiar `sasco.cl` por el dominio correspondiente.
