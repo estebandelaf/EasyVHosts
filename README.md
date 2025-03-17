@@ -9,7 +9,7 @@ Easy Virtual Hosts (EasyVHosts)
 - https://github.com/derafu/github
 
 Revisa esos proyectos si te interesa automatizar el despliegue de sitios web.
---
+---
 
 Easy Virtual Hosts o EasyVHosts es una herramienta para la administración de
 dominios virtuales de diferentes usuarios en un sistema GNU/Linux. Utiliza un
