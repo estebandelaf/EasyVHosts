@@ -1,6 +1,14 @@
 Easy Virtual Hosts (EasyVHosts)
 ===============================
 
+---
+**ARCHIVADO**: Lo he reemplazado por estos repositorios:
+
+- https://github.com/derafu/docker-php-caddy-server
+- https://github.com/derafu/deployer
+- https://github.com/derafu/github
+--
+
 Easy Virtual Hosts o EasyVHosts es una herramienta para la administración de
 dominios virtuales de diferentes usuarios en un sistema GNU/Linux. Utiliza un
 formato de directorios y archivos para los dominios de los usuarios, obteniendo
