@@ -7,8 +7,6 @@ Easy Virtual Hosts (EasyVHosts)
 - https://github.com/derafu/docker-php-caddy-server
 - https://github.com/derafu/deployer
 - https://github.com/derafu/github
-
-Revisa esos proyectos si te interesa automatizar el despliegue de sitios web.
 ---
 
 Easy Virtual Hosts o EasyVHosts es una herramienta para la administración de
